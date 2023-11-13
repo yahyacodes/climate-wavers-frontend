@@ -12,6 +12,8 @@ The ClimateWavers Frontend Microservice is the user interface of the ClimateWave
 - Hook Form: A library for managing forms in React using hooks.
 - Tailwind CSS: A utility-first CSS framework for building responsive and design-friendly interfaces.
 
+## UI/UX Design
+Check out the [figma](https://www.figma.com/file/Byq6CeRKlxrK9HLkZRu50E/Climate-Waver?type=design&mode=design)
 ## Features
 
 - **User Authentication**: Secure user authentication using industry-standard protocols.
