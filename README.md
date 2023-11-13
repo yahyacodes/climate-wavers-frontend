@@ -13,6 +13,7 @@ The ClimateWavers Frontend Microservice is the user interface of the ClimateWave
 - Tailwind CSS: A utility-first CSS framework for building responsive and design-friendly interfaces.
 
 ## UI/UX Design
+[Design](https://github.com/ClimateWavers/frontend/blob/a833389c682db21507c92f26a8d34df9786f2b95/design.png)
 Check out the [figma](https://www.figma.com/file/Byq6CeRKlxrK9HLkZRu50E/Climate-Waver?type=design&mode=design)
 ## Features
 
