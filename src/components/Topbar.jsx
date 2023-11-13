@@ -3,13 +3,13 @@ import Padder from './Padder'
 import { useParams } from 'react-router-dom'
 import {HiOutlineMenuAlt1} from "react-icons/hi"
 import {AiOutlineSearch} from "react-icons/ai"
-import Menu from './menu'
+import Menu from './Menu'
 import Mobilemenu from './Mobilemenu'
 
 const Topbar = () => {
 
   const [isOpen, setIsOpen] = useState(false)
-  
+
 
   return (
     // <Padder >  flex flex-row

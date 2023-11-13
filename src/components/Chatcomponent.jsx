@@ -1,27 +1,99 @@
-import React, { useState } from 'react'
-import { AiOutlineSend } from 'react-icons/ai'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { AiOutlineSend } from "react-icons/ai";
 
 const Chatcomponent = () => {
+  const [textValue, setTextValue] = useState("");
+  const [isSubmited, setIsSubmited] = useState("");
+  const [receivedMessages, setReceivedMessages] = useState([]);
+  const [allMessages, setAllMessages] = useState([]);
+  //const userId = 1;
+  const kafkaApi = import.meta.env.VITE_APP_KAFKA_URL;
 
-    const [textValue, setTextValue] = useState('')
-    const [isSubbmited, setIsSubbmited] = useState(false)
+  const produceMessage = async () => {
+    try {
+      await axios.post(`${kafkaApi}/api/chat`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"userId": "e9d11e91-2db8-4ae9-ab62-367f278cc1ed", "message": "what is heat?", "userLocation": {"latitude": 40.73061, "longitude": -73.935242}}),
+      });
+      if (textValue.trim() !== "" && isSubmited) {
+        // Update the list with the new item
+        setAllMessages((allMessages) => [...allMessages, textValue]);
+		console.log(allMessages)
 
+        // Clear the newItem state for the next input
+        setTextValue("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+ /** const fetchMessages = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_CHATBOT}/getMessages`
+      );
+      const data = await response.json();
+
+      // Update receivedMessages state with the fetched messages
+      setAllMessages(data.messages);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  fetchMessages();*/
+
+  useEffect(() => {
+    // Fetch messages from the kafka consumer endpoint
+    const consumeMessages = async () => {
+      try {
+        const response = await axios.get(`${kafkaApi}/api/ai-response/e9d11e91-2db8-4ae9-ab62-367f278cc1ed`);
+        const data = await response.json();
+		console.log(data)
+
+        // Update receivedMessages state with the fetched messages
+        setReceivedMessages(data.messages);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    // Call the fetchMessages function
+    consumeMessages();
+  }, []);
   return (
-    <div className='max-h-fit h-[90%] flex flex-col justify-between'>
-        <div className='overflow-auto'>
-        {
-            isSubbmited ?
-                textValue
-            :
-                null
-        }
-        </div>
-        <div className='bg-graylight p-1 mx-5 md:p-2 border-2 border-graydark  rounded-full flex flex-row items-center '>
-            <input className='justify-self-end bg-transparent w-[80%] focus:outline-0 focus:bg-gray-200 focus:rounded-full p-2 text-black ' onChange={(e) => setTextValue(e.target.value)}  type="text" placeholder='Ask a question.' /> <AiOutlineSend size={25} onClick={() => setIsSubbmited(true)} className='items-end cursor-pointer ' type='submit' /> 
-        </div>
+    <div className="max-h-fit h-[90%] flex flex-col justify-between">
+      <div className="overflow-auto">
+        {allMessages.map((message, index) => (
+          <div key={index}>{message}</div>
+        ))}
+        {receivedMessages.map((message, index) => (
+          <div key={index}>{message}</div>
+        ))}
+      </div>
+      <div className="bg-graylight p-1 mx-5 md:p-2 border-2 border-graydark  rounded-full flex flex-row items-center ">
+        <input
+          className="justify-self-end bg-transparent w-[80%] focus:outline-0 focus:bg-gray-200 focus:rounded-full p-2 text-black "
+          value={textValue}
+          onChange={(e) => setTextValue(e.target.value)}
+          type="text"
+          placeholder="Ask waverx a question."
+        />{" "}
+        <AiOutlineSend
+          size={25}
+          onClick={() => {
+            setIsSubmited(true);
+            produceMessage();
+          }}
+          className="items-end p-.5 ml-3 cursor-pointer "
+          type="submit"
+        />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Chatcomponent
+export default Chatcomponent;
