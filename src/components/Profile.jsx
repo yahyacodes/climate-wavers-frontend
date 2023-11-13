@@ -13,13 +13,13 @@ import {
   } from '@tanstack/react-query'
 
 const Profile = () => {
-    
+
     // Fetch function.
     const userName = Cookies.get("username")
     const access_token = Cookies.get("access_token")
     const refeshToken = Cookies.get("refresh_token")
     const headers = {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${access_token}`,
         'Cookies': refeshToken,
     };
@@ -34,7 +34,7 @@ const Profile = () => {
                 .catch(err => console.log(err))
     }
     const query = useQuery({
-        queryKey: ['profileFetch'], 
+        queryKey: ['profileFetch'],
         queryFn: fetchProfile,
     })
 
@@ -70,7 +70,7 @@ const Profile = () => {
     <div className='text-2xl text-center pt-1 md:pt-5 '>
         <h2 className='border-b-2 pb-1 md:pb-3 text-lg md:text-xl font-semibold flex flex-row items-center  '><BsPerson className='ml-2 mr-1 '/>Profile</h2>
         <div className='bg-blue-400 h-[170px] relative '>
-            <img src="../../public/pic1.png" className='absolute bottom-0 left-0 w-28 ml-2 mb-2 ' alt="" />
+            <img src="../../logo/pic1.png" className='absolute bottom-0 left-0 w-28 ml-2 mb-2 ' alt="" />
         </div>
         <div>
             <div className='flex flex-row gap-2 ml-3 mt-3 '>

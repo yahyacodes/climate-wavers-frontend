@@ -20,7 +20,7 @@ const Accountcard = () => {
     <div className='flex flex-row items-center px-3 py-1 justify-between '>
         <div className='flex flex-row items-center self-center '>
             {/* Img here */}
-            <div className='min-w-[30%] w-[30%] '><img src='../../public/pic1.png' className='mr-2 w-[100%] '/></div>
+            <div className='min-w-[30%] w-[30%] '><img src='../../logo/pic1.png' className='mr-2 w-[100%] '/></div>
             <div className='text-xs'>
                 <h3>Titi Simon</h3>
                 <p>@titisimon21</p>

@@ -21,7 +21,7 @@ const Emailconfirmation = () => {
   return (
     <div className='grid md:grid-cols-[3fr_4fr] grid-cols-[1fr]  items-center '>
         <div className='bg-green grid place-content-center h-[80vh] md:h-[100vh]   '>
-            <img src="../../public/logolargewhite.png" alt="" />
+            <img src="../../logo/logolargewhite.png" alt="" />
         </div>
         {
             userToken === token ?

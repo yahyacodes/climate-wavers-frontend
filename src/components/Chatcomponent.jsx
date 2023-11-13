@@ -12,7 +12,7 @@ const Chatcomponent = () => {
 
   const produceMessage = async () => {
     try {
-      await axios.post(`${kafkaApi}/api/chat`, {
+      await axios.post(`${kafkaApi}/api/produce-message`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -31,7 +31,7 @@ const Chatcomponent = () => {
     }
   };
 
- /** const fetchMessages = async () => {
+  const fetchMessages = async () => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_APP_CHATBOT}/getMessages`
@@ -44,13 +44,13 @@ const Chatcomponent = () => {
       console.error(error);
     }
   };
-  fetchMessages();*/
+  fetchMessages();
 
   useEffect(() => {
     // Fetch messages from the kafka consumer endpoint
     const consumeMessages = async () => {
       try {
-        const response = await axios.get(`${kafkaApi}/api/ai-response/e9d11e91-2db8-4ae9-ab62-367f278cc1ed`);
+        const response = await axios.get(`${kafkaApi}/api/consume-message/e9d11e91-2db8-4ae9-ab62-367f278cc1ed`);
         const data = await response.json();
 		console.log(data)
 

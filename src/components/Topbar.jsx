@@ -24,7 +24,7 @@ const Topbar = () => {
         }
         {/* Logo */}
         <div className=' justify-self-center md:justify-self-start '>
-            <img src='../../public/logo.png'/>
+            <img src='../../logo/logo.png'/>
         </div>
         {/* Search btn */}
         {/* <div className='  w-[60%] justify-self-end '> */}
