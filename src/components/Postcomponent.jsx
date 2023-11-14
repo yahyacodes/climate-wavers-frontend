@@ -12,7 +12,7 @@ const Postcomponent = () => {
     <div className=' py-3 border-b-2'>
         <Accountcard />
         <p className='text-left text-sm px-3 my-3 '>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa dicta eligendi repellat explicabo debitis eos, totam fugit sit, ad perspiciatis vitae magni placeat perferendis! Reprehenderit natus ipsam alias non sapiente.</p>
-        <img className='w-[100%] px-3 ' src="../../logo/postpic.png" alt="" />
+        <img className='w-[100%] px-3 ' src="postpic.png" alt="" />
         <div className='flex flex-row justify-between px-3 mt-2 ' >
             <div className='flex flex-row items-center  '>
                 <AiOutlineHeart size={18} />
