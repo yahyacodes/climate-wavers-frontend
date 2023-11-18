@@ -18,22 +18,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 
 export default function Createpost() {
-  const { 
-    register, 
-    handleSubmit, 
+  const {
+    register,
+    handleSubmit,
     reset,
     formState,
   } = useForm();
 
   const formError = formState.errors
 
-  
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
 
   const onSubmit = (data) => {
     console.log(data);
     // Send data to API if needed
     const posterFn = async() => {
-      await axios.post("https://backend-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/backend/register", data)
+      await axios.post(`${backendUrl}/api/v1/backend/register`, data)
         .then((response) => {
           Cookies.set("token", response.data.token)
           Cookies.set("userId", response.data.id)
@@ -61,25 +61,25 @@ export default function Createpost() {
   };
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit(onSubmit)}
       className=" p-3 md:p-6 bg-white rounded-md shadow-md flex flex-col"
     >
-      <input 
-      type="text" 
-      placeholder="Heading" 
+      <input
+      type="text"
+      placeholder="Heading"
       className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
       {...register("heading", {required: true})} />
-      <textarea 
-      type="text" 
-      placeholder="Description" 
+      <textarea
+      type="text"
+      placeholder="Description"
       className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
       {...register("description", {required: true})} />
-      <input 
-      type="file" 
+      <input
+      type="file"
       className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
       {...register("description", {required: true})} />
-      <button 
+      <button
         className="w-full p-2 bg-green text-white rounded cursor-pointer z-10"
         type="submit"
       >

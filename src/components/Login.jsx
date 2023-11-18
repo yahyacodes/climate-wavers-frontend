@@ -2,19 +2,23 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Login() {
-  const { 
-    register, 
-    handleSubmit, 
+  const {
+    register,
+    handleSubmit,
     watch,
-    formState: { errors, isSubmitting }, 
+    formState: { errors, isSubmitting },
     reset
   } = useForm();
+  const navigate = useNavigate();
 
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
   const onSubmit = (data) => {
     const posterFn = async() => {
-      await axios.post("https://backend-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/backend/login", data)
+      await axios.post(`${backendUrl}/api/v1/backend/login`, data)
         .then((response) => {
           console.log(response)
           Cookies.set("access_token", response.data.access_token)
@@ -38,25 +42,27 @@ export default function Login() {
       password: "",
       username: "",
     });
+	navigate('/');
+
   };
 //   console.log(errors);
 
   return (
-    <form 
+    <form
     onSubmit={handleSubmit(onSubmit)}
     className="max-w-md mx-auto w-[100%] p-3 md:p-6 bg-white rounded-md shadow-md flex flex-col "
     >
-        <input 
-        type="text" 
-        placeholder="Username, email or phone" 
+        <input
+        type="text"
+        placeholder="Username, email or phone"
         className="w-full p-2 mb-4 border rounded focus:border-green focus:outline-none"
         {...register("username", )} />
-        <input 
-        type="password" 
-        placeholder="Password*" 
+        <input
+        type="password"
+        placeholder="Password*"
         className="w-full p-2 mb-4 border rounded focus:border-green focus:outline-none"
         {...register("password", )} />
-        <input 
+        <input
         className="w-full p-2 bg-green text-white rounded cursor-pointer"
         type="submit" />
     </form>

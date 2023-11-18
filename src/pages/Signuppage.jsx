@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import {FcGoogle} from 'react-icons/fc'
-import {ImTwitter} from 'react-icons/im'
-import {FaFacebook} from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import Signupform from '../components/Signupform'
 import { AiOutlineClose } from 'react-icons/ai'
@@ -10,16 +8,20 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'
 
+const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
+const oauthUrl = import.meta.env.VITE_APP_OAUTH_URL;
+
+
 const Signuppage = () => {
 
     const googleSigninFunction = () => {
         console.log("The icon has been clicked")
-        axios.get("https://oauth-olagoldhackxx-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/api/v1/auth/new-google")
+        axios.get(`${oauthUrl}/api/v1/auth/new-google`)
     }
 
     const userId = Cookies.get("userId")
     const resendEmailFn = () => {
-        axios.get(`https://backend-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/backend/${userId}/verify`)
+        axios.get(`${backendUrl}/api/v1/backend/${userId}/verify`)
             .then((response) => console.log(response))
             .then((error) => console.log(error))
     }
@@ -42,23 +44,23 @@ const Signuppage = () => {
     <>
     <div className='grid md:grid-cols-[3fr_4fr] grid-cols-[1fr]  items-center '>
         <div className='bg-green grid place-content-center h-[80vh] md:h-[100vh]   '>
-            <img src="../../logo/logolargewhite.png" alt="" />
+            <img src="../../logolargewhite.png" alt="" />
         </div>
         <div className='flex flex-col text-center items-center gap-4 -mt-[550px] md:mt-0 bg-opacity-40 backdrop-filter backdrop-blur-lg bg-white border md:border-0 border-gray-300  md:bg-inherit w-[90%] md:w-[100%] justify-self-center rounded-xl p-3 '>
             {
                 isFormOpen === false ?
                 <>
                 <h1 className='text-2xl font-semibold mb-3 mt-8 md:mt-0 '>Sign up</h1>
-                <a href="https://oauth-olagoldhackxx-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/api/v1/auth/new-google">
+                <a href={`${oauthUrl}/api/v1/auth/new-google`}>
                 <div
                 className='flex flex-row mb-3 items-center md:text-xl text-base  font-semibold outline outline-1 bg-white text-black p-4 rounded-full '
                 // onClick={() => googleSigninFunction()}
                 ><FcGoogle className='mr-2 ' size={32} /> Continue in with Google</div></a>
                 <div className='flex flex-row gap-3 w-[100%] justify-center bg-white py-3 '>
-                    <a href='https://oauth-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/auth/titter'><img className='w-[35px]' src="../../logo/2.png" alt="" /></a>
-                    <a href='https://oauth-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/auth/facebook' ><img className='w-[35px]' src="../../logo/3.png" alt="" /></a>
-                    <a href='https://oauth-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/auth/redhat-sso' ><img className='w-[35px]' src="../../logo/4.png" alt="" /></a>
-                    <a href='https://oauth-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/auth/linkedin' ><img className='w-[35px]' src="../../logo/5.png" alt="" /></a>
+                    <a href={`${oauthUrl}/api/v1/auth/github`}><img className='w-[35px]' src="../../2.png" alt="" /></a>
+                    <a href={`${oauthUrl}/api/v1/auth/facebook`} ><img className='w-[35px]' src="../../3.png" alt="" /></a>
+                    <a href={`${oauthUrl}/api/v1/auth/redhat-sso`} ><img className='w-[35px]' src="../../4.png" alt="" /></a>
+                    <a href={`${oauthUrl}/api/v1/auth/linkedin`} ><img className='w-[35px]' src="../../5.png" alt="" /></a>
                 </div>
                 <p>or</p>
                 <button className='md:text-xl text-base font-semibold bg-green text-white p-4 rounded-full w-[50%] ' onClick={() => setIsFormOpen(true)}  >Sign Up</button>

@@ -12,6 +12,7 @@ import {
     QueryClientProvider,
   } from '@tanstack/react-query'
 
+const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
 const Profile = () => {
 
     // Fetch function.
@@ -25,7 +26,7 @@ const Profile = () => {
     };
     const fetchProfile = async () => {
         console.log(userName)
-        await axios.get(`https://backend-climatewavers-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/api/v1/backend/${userName}/profile`, {headers})
+        await axios.get(`${backendUrl}/api/v1/backend/${userName}/profile`, {headers})
                 .then(res => {
                     console.log(res.data)
                     Cookies.set('access_token', response.data.access_token)
