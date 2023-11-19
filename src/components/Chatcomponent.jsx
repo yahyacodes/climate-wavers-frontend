@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 
 const Chatcomponent = () => {
@@ -10,30 +10,58 @@ const Chatcomponent = () => {
   //const userId = 1;
   const kafkaApi = import.meta.env.VITE_APP_KAFKA_URL;
 
-  const produceMessage = async () => {
-    try {
-      await axios.post(`${kafkaApi}/api/produce-message`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({"userId": "e9d11e91-2db8-4ae9-ab62-367f278cc1ed", "message": "what is heat?", "userLocation": {"latitude": 40.73061, "longitude": -73.935242}}),
-      });
-      if (textValue.trim() !== "" && isSubmited) {
-        // Update the list with the new item
-        setAllMessages((allMessages) => [...allMessages, textValue]);
-		console.log(allMessages)
-
-        // Clear the newItem state for the next input
-        setTextValue("");
+  // Fetch messages from the kafka consumer endpoint
+  const handleSubmit = async (e) => {
+	e.preventDefault();
+    setIsSubmited(true);
+    const consumeMessages = async () => {
+      try {
+        await axios
+          .get(
+            `${kafkaApi}/api/ai-response/e9d11e91-2db8-4ae9-ab62-367f278cc1ed`
+          )
+          .then((res) => {
+            console.log(res.data);
+            // Update receivedMessages state with the fetched messages
+            setReceivedMessages(res.data.messages);
+          });
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    };
 
-  const fetchMessages = async () => {
+    const produceMessage = async () => {
+      try {
+        const data = {
+          userId: "e9d11e91-2db8-4ae9-ab62-367f278cc1ed",
+          message: textValue,
+          userLocation: { latitude: 40.73061, longitude: -73.935242 },
+        };
+        await axios
+          .post(`${kafkaApi}/api/chat`, data)
+          .then(async (res) => {
+            console.log(res.data);
+            if (textValue.trim() !== "" && isSubmited) {
+              // Update the list with the new item
+              setAllMessages((allMessages) => [...allMessages, textValue]);
+              console.log(allMessages);
+              setTextValue("");
+              // Call the fetchMessages function
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    await produceMessage();
+	await consumeMessages();
+  };
+  /**const fetchMessages = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${import.meta.env.VITE_APP_CHATBOT}/getMessages`
       );
       const data = await response.json();
@@ -44,26 +72,8 @@ const Chatcomponent = () => {
       console.error(error);
     }
   };
-  fetchMessages();
+  fetchMessages();*/
 
-  useEffect(() => {
-    // Fetch messages from the kafka consumer endpoint
-    const consumeMessages = async () => {
-      try {
-        const response = await axios.get(`${kafkaApi}/api/consume-message/e9d11e91-2db8-4ae9-ab62-367f278cc1ed`);
-        const data = await response.json();
-		console.log(data)
-
-        // Update receivedMessages state with the fetched messages
-        setReceivedMessages(data.messages);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // Call the fetchMessages function
-    consumeMessages();
-  }, []);
   return (
     <div className="max-h-fit h-[90%] flex flex-col justify-between">
       <div className="overflow-auto">
@@ -84,10 +94,7 @@ const Chatcomponent = () => {
         />{" "}
         <AiOutlineSend
           size={25}
-          onClick={() => {
-            setIsSubmited(true);
-            produceMessage();
-          }}
+          onClick={handleSubmit}
           className="items-end p-.5 ml-3 cursor-pointer "
           type="submit"
         />

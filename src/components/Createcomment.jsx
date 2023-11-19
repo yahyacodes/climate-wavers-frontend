@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
 
-export default function Createpost() {
+export default function Createcomment() {
   const { register, handleSubmit, reset } = useForm();
 
   //const formError = formState.errors;
-
+  const postId = useParams().postId;
   const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
   const accessToken = Cookies.get("access_token");
 
@@ -22,7 +23,7 @@ export default function Createpost() {
       };
       data.picture = data.picture[0];
       await axios
-        .post(`${backendUrl}/api/v1/backend/posts/create`, data, {
+        .post(`${backendUrl}/api/v1/backend/posts/${postId}/comment`, data, {
           headers,
           withCredentials: true,
         })
@@ -33,8 +34,8 @@ export default function Createpost() {
         .catch((error) => console.log(error));
     };
     toast.promise(posterFn, {
-      pending: "Submitting post..",
-      success: "Post Successful 👌",
+      pending: "Submitting comment..",
+      success: "Comment posted 👌",
       error: "An Error occured 🤯",
     });
     // Reset the form after submission
@@ -46,21 +47,12 @@ export default function Createpost() {
       onSubmit={handleSubmit(onSubmit)}
       className=" p-3 md:p-6 bg-white rounded-md shadow-md flex flex-col"
     >
-      <select
-        className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
-        {...register("category", { required: true })}
-      >
-        <option value="">Select Category</option>
-        <option value="Community">Community</option>
-        <option value="Education">Educational</option>
-        <option value="Happening">Happening now</option>
-        {/* Add more options as needed */}
-      </select>
+
       <textarea
         type="text"
-        placeholder="Description"
+        placeholder="Comment"
         className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
-        {...register("text", { required: true })}
+        {...register("comment", { required: true })}
       />
       <input
         type="file"
@@ -76,3 +68,8 @@ export default function Createpost() {
     </form>
   );
 }
+
+
+/*Createcomment.propTypes = {
+	postId: PropTypes.string,
+  };*/

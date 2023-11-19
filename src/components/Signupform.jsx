@@ -156,6 +156,12 @@ export default function Signupform() {
         placeholder="Username*"
         className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
         {...register("username", { required: true, maxLength: 100 })}
+      />{" "}
+      <input
+        type="text"
+        placeholder="Bio"
+        className="w-full p-2 mb-3 border rounded focus:border-green focus:outline-none"
+        {...register("bio", { required: false })}
       />
       <input
         type="password"

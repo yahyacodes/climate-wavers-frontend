@@ -1,4 +1,3 @@
-import React from 'react'
 import Postcomponent from './Postcomponent'
 
 const Aianalysis = () => {
