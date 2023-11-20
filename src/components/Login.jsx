@@ -8,8 +8,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors, isSubmitting },
+    //formState: { errors, isSubmitting },
     reset,
   } = useForm();
   const navigate = useNavigate();

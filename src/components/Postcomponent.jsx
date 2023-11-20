@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Accountcard from "./Accountcard";
 import { AiFillHeart, AiOutlineRetweet } from "react-icons/ai";
@@ -13,153 +13,10 @@ import PropTypes from "prop-types";
 const Postcomponent = ({ category = "" }) => {
   const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
   const accessToken = Cookies.get("access_token");
-  const [posts, setPosts] = useState([]);
+  const postsRef = useRef([]);
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
   const [isSave, setIsSave] = useState(false);
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
-    "X-CSRFToken": `${Cookies.get("csrftoken")}`,
-  };
-
-  const handleLike = (postId, index) => {
-    if (!isLike) {
-      likePost(postId, index);
-    } else {
-      unlikePost(postId, index);
-    }
-  };
-
-  const handleSave = (postId, index) => {
-    if (!isSave) {
-      savePost(postId, index);
-    } else {
-      unsavePost(postId, index);
-    }
-  };
-
-  const likePost = async (postId, index) => {
-    const pendingToastId = toast.info("Liking a post...", {
-      autoClose: 1000,
-    });
-    await axios
-      .put(`${backendUrl}/api/v1/backend/posts/${postId}/like`, {
-        headers: headers,
-        withCredentials: true,
-      })
-      .then((res) => {
-        Cookies.set("access_token", res.data.access_token);
-        toast.dismiss(pendingToastId);
-        toast.success("Liked a post", { autoClose: 1000 });
-        setIsLike(!isLike);
-        const updatedPost = [...posts];
-        updatedPost[index] = {
-          ...updatedPost[index],
-          isLike: true,
-        };
-
-        // Update the state
-        setPosts(updatedPost);
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err.message);
-        toast.error("Error liking a post", { autoClose: 1000 });
-      });
-  };
-
-  const unlikePost = async (postId, index) => {
-    const pendingToastId = toast.info("Unliking a post...", {
-      autoClose: 1000,
-    });
-    await axios
-      .put(`${backendUrl}/api/v1/backend/${postId}/unlike`, {
-        headers: headers,
-        withCredentials: true,
-      })
-      .then((res) => {
-        Cookies.set("access_token", res.data.access_token);
-        toast.dismiss(pendingToastId);
-        toast.success("Unliked a post", { autoClose: 1000 });
-        setIsLike(!isLike);
-        const updatedPost = [...posts];
-        updatedPost[index] = {
-          ...updatedPost[index],
-          isLike: false,
-        };
-
-        // Update the state
-        setPosts(updatedPost);
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err.message);
-        toast.error("Error unliking a post", { autoClose: 1000 });
-      });
-  };
-  const savePost = async (postId, index) => {
-    const pendingToastId = toast.info("Saving a post..", {
-      autoClose: 1000,
-    });
-    await axios
-      .put(`${backendUrl}/api/v1/backend/${postId}/save`, {
-        headers: headers,
-        withCredentials: true,
-      })
-      .then((res) => {
-        Cookies.set("access_token", res.data.access_token);
-        toast.dismiss(pendingToastId);
-        toast.success("Saved a post", { autoClose: 1000 });
-        setIsSave(!isSave);
-        const updatedPost = [...posts];
-        updatedPost[index] = {
-          ...updatedPost[index],
-          isSave: true,
-        };
-
-        // Update the state
-        console.log(updatedPost);
-        setPosts(updatedPost);
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err.message);
-        toast.error("Error saving a post", { autoClose: 1000 });
-      });
-  };
-  const unsavePost = async (postId, index) => {
-    const pendingToastId = toast.info("Unsaving a post...", {
-      autoClose: 1000,
-    });
-    await axios
-      .put(`${backendUrl}/api/v1/backend/${postId}/unsave`, {
-        headers: headers,
-        withCredentials: true,
-      })
-      .then((res) => {
-        Cookies.set("access_token", res.data.access_token);
-        toast.dismiss(pendingToastId);
-        toast.success("Unsaved a post", { autoClose: 1000 });
-        setIsSave(!isSave);
-        const updatedPost = [...posts];
-        updatedPost[index] = {
-          ...updatedPost[index],
-          isSave: false,
-        };
-
-        // Update the state
-        console.log(updatedPost);
-        setPosts(updatedPost);
-
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err.message);
-        toast.error("Error unsaving a post", { autoClose: 1000 });
-      });
-  };
 
   useEffect(() => {
     const headers = {
@@ -174,26 +31,26 @@ const Postcomponent = ({ category = "" }) => {
           withCredentials: true,
         })
         .then((res) => {
-          let dataCateory;
+          let dataCategory;
           if (category) {
-            dataCateory = `${category}_posts`;
+            dataCategory = `${category}_posts`;
           } else {
-            dataCateory = "all_posts";
+            dataCategory = "all_posts";
           }
 
-          const posts = res.data[dataCateory].map((post) => ({
+          const posts = res.data[dataCategory].map((post) => ({
             ...post,
-            isLike: isLike,
-            isSave: isSave,
+            isLike: false,
+            isSave: false,
           }));
-          setPosts(posts);
+          postsRef.current = posts;
           Cookies.set("access_token", res.data.access_token);
           return res.data;
         })
         .catch((err) => console.log(err.message));
     };
     fetchPosts();
-  }, [category, accessToken, backendUrl, isSave, isLike]);
+  }, [category, accessToken, backendUrl]);
 
   const handlePostClick = (selectedPost) => {
     // Navigate to the comment page and pass the post data
@@ -201,11 +58,149 @@ const Postcomponent = ({ category = "" }) => {
       state: { postData: selectedPost, category },
     });
   };
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${accessToken}`,
+    "X-CSRFToken": `${Cookies.get("csrftoken")}`,
+  };
+  const handleLike = (postId, index) => {
+    if (!isLike) {
+      likePost(postId, index);
+    } else {
+      unlikePost(postId, index);
+    }
+  };
+  const handleSave = (postId, index) => {
+    if (!isSave) {
+      savePost(postId, index);
+    } else {
+      unsavePost(postId, index);
+    }
+  };
+
+  const likePost = async (postId, index) => {
+    const pendingToastId = toast.info("Liking a post...", {
+      autoClose: 1000,
+    });
+    await axios
+      .get(`${backendUrl}/api/v1/backend/posts/${postId}/like`, {
+        headers: headers,
+      })
+      .then((res) => {
+        Cookies.set("access_token", res.data.access_token);
+        toast.dismiss(pendingToastId);
+        toast.success("Liked a post", { autoClose: 1000 });
+        setIsLike(!isLike);
+        const updatedPost = postsRef.current;
+        const post = updatedPost[index];
+        (post["isLike"] = true),
+          (post["likers_count"] = post.savers_count + 1),
+          (updatedPost[index] = post);
+        // Update the state
+        postsRef.current = updatedPost;
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error("Error liking a post", { autoClose: 1000 });
+      });
+  };
+
+  const unlikePost = async (postId, index) => {
+    const pendingToastId = toast.info("Unliking a post...", {
+      autoClose: 1000,
+    });
+    await axios
+      .get(`${backendUrl}/api/v1/backend/posts/${postId}/unlike`, {
+        headers: headers,
+        withCredentials: true,
+      })
+      .then((res) => {
+        Cookies.set("access_token", res.data.access_token);
+        toast.dismiss(pendingToastId);
+        toast.success("Unliked a post", { autoClose: 1000 });
+        setIsLike(!isLike);
+        const updatedPost = postsRef.current;
+        const post = updatedPost[index];
+        (post["isLike"] = false),
+          (post["likers_count"] = post.savers_count - 1),
+          (updatedPost[index] = post);
+
+        // Update the state
+        postsRef.current = updatedPost;
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error("Error unliking a post", { autoClose: 1000 });
+      });
+  };
+  const savePost = async (postId, index) => {
+    const pendingToastId = toast.info("Saving a post..", {
+      autoClose: 1000,
+    });
+    await axios
+      .get(`${backendUrl}/api/v1/backend/posts/${postId}/save`, {
+        headers: headers,
+        withCredentials: true,
+      })
+      .then((res) => {
+        Cookies.set("access_token", res.data.access_token);
+        toast.dismiss(pendingToastId);
+        toast.success("Saved a post", { autoClose: 1000 });
+        setIsSave(!isSave);
+        const updatedPost = postsRef.current;
+        const post = updatedPost[index];
+        (post["isSave"] = true),
+          (post["savers_count"] = post.savers_count + 1),
+          (updatedPost[index] = post);
+
+        // Update the state
+        postsRef.current = updatedPost;
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error("Error saving a post", { autoClose: 1000 });
+      });
+  };
+  const unsavePost = async (postId, index) => {
+    const pendingToastId = toast.info("Unsaving a post...", {
+      autoClose: 1000,
+    });
+    await axios
+      .get(`${backendUrl}/api/v1/backend/posts/${postId}/unsave`, {
+        headers: headers,
+        withCredentials: true,
+      })
+      .then((res) => {
+        Cookies.set("access_token", res.data.access_token);
+        toast.dismiss(pendingToastId);
+        toast.success("Unsaved a post", { autoClose: 1000 });
+        const updatedPost = postsRef.current;
+        const post = updatedPost[index];
+        (post["isSave"] = false),
+          (post["savers_count"] = post?.savers_count > 1 ? post?.savers_count - 1 : 0),
+          (updatedPost[index] = post);
+
+        // Update the state
+        postsRef.current = updatedPost;
+
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error("Error unsaving a post", { autoClose: 1000 });
+      });
+  };
+  console.log(postsRef);
+
   return (
     <div className=" py-3 border-b-2">
-      {posts.map((post, index) => (
+      {postsRef.current.map((post, index) => (
         <div key={index} className="border-b border-gray-300 py-4">
-          <Accountcard userId={post.id} />
+          <Accountcard userId={post.user} />
           <div onClick={() => handlePostClick(post)}>
             <p className="text-left text-sm px-3 my-3 ">{post.content_text}</p>
             <img

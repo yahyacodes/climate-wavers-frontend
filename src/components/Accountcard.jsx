@@ -24,7 +24,7 @@ const Accountcard = ({ userId }) => {
       autoClose: 1000,
     });
     await axios
-      .put(`${backendUrl}/api/v1/backend/${userId}/follow`, {
+      .get(`${backendUrl}/api/v1/backend/${userId}/follow`, {
         headers: headers,
         withCredentials: true,
       })
@@ -44,7 +44,7 @@ const Accountcard = ({ userId }) => {
       autoClose: 2000,
     });
     await axios
-      .put(`${backendUrl}/api/v1/backend/${userId}/unfollow`, {
+      .get(`${backendUrl}/api/v1/backend/${userId}/unfollow`, {
         headers: headers,
         withCredentials: true,
       })

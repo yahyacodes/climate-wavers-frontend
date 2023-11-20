@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
 export default function Createpost() {
   const { register, handleSubmit, reset } = useForm();
@@ -10,7 +11,53 @@ export default function Createpost() {
   //const formError = formState.errors;
 
   const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
+  const modelResponseUrl = import.meta.env.VITE_APP_MODEL_RESPONSE_URL;
   const accessToken = Cookies.get("access_token");
+  const [location, setLocation] = useState(null);
+  const username = Cookies.get("username");
+
+  useEffect(() => {
+    // Check if the browser supports geolocation
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // Extract latitude and longitude from the position object
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+        },
+        (error) => {
+          toast(error, {
+            autoClose: 1500,
+          });
+        }
+      );
+    } else {
+      toast("Geolocation is not supported by your browser", {
+        autoClose: 2500,
+      });
+    }
+  }, []);
+  const aiAnalyze = async (data, postId) => {
+    data["username"] = username;
+    data["message"] = data.text;
+	if (data.picture) {
+    data["image"] = data.picture[0];
+	}
+    data["postId"] = postId;
+    data["location"] = location
+      ? `${location.longitude},${location.latitude}`
+      : "53.6,42.3";
+    await axios
+      .post(`${modelResponseUrl}/api/chatbot`, data)
+      .then((response) => {
+        console.log(response.data);
+        Cookies.set("access_token", response.data.access_token);
+        toast.success("waverX just analyzed your report, check it out", {
+          autoClose: 2500,
+        });
+      })
+      .catch((error) => console.log(error));
+  };
 
   const onSubmit = (data) => {
     // Send data to API if needed
@@ -29,6 +76,9 @@ export default function Createpost() {
         .then((response) => {
           console.log(response.data);
           Cookies.set("access_token", response.data.access_token);
+          if (data.category == "Happening") {
+            aiAnalyze(data, response.data.posts.id);
+          }
         })
         .catch((error) => console.log(error));
     };
@@ -36,7 +86,9 @@ export default function Createpost() {
       pending: "Submitting post..",
       success: "Post Successful 👌",
       error: "An Error occured 🤯",
-    });
+    }, {
+        autoClose: 800,
+      });
     // Reset the form after submission
     reset();
   };

@@ -8,7 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Loginpage from "./pages/Loginpage";
 import Forgotpasswordpage from "./pages/Forgotpasswordpage";
 import Happeningnow from "./components/Happeningnow";
-import Aianalysis from "./components/Aianalysis";
+import WaverX from "./components/WaverX";
 import Waverx from "./pages/Waverx";
 import Profile from "./components/Profile";
 import Emailconfirmation from "./pages/Emailconfirmation";
@@ -28,7 +28,7 @@ function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/education" element={<Education />} />
           <Route path="/happeningnow" element={<Happeningnow />} />
-          <Route path="/aianalysis" element={<Aianalysis />} />
+          <Route path="/waverx-tweet" element={<WaverX />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/:postId/comments" element={<Comment />} />
           <Route path="/createpost" element={<Createpost />} />

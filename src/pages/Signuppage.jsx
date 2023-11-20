@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Signupform from "../components/Signupform";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 
@@ -12,10 +12,6 @@ const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
 const oauthUrl = import.meta.env.VITE_APP_OAUTH_URL;
 
 const Signuppage = () => {
-  const googleSigninFunction = () => {
-    console.log("The icon has been clicked");
-    axios.get(`${oauthUrl}/api/v1/auth/new-google`);
-  };
 
   const resendEmailFn = () => {
     const userId = Cookies.get("userId");
