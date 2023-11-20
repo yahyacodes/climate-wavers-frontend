@@ -34,7 +34,7 @@ function App() {
           <Route path="/createpost" element={<Createpost />} />
           <Route path="/:postId/comment" element={<Createcomment />} />
         </Route>
-        <Route path="/waverx" element={<Waverx />} />
+        <Route path="/:userId/waverx" element={<Waverx />} />
         <Route path="/signup" element={<Signuppage />} />
         <Route
           path="/emailconfirmation/:userToken"

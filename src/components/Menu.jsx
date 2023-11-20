@@ -1,7 +1,10 @@
 import { BsPerson, BsFillHouseFill, BsBookmark, BsRobot, BsPeople } from "react-icons/bs";
 import { Link, NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
+
 
 const Menu = () => {
+  const userId = Cookies.get("user_id")
   return (
     <div className="flex flex-col px-6">
       {/* Menu */}
@@ -29,7 +32,7 @@ const Menu = () => {
           Community
         </NavLink>
         <NavLink
-          to={"/waverx"}
+          to={`/${userId}/waverx`}
           className={({ isActive }) =>
             isActive
               ? "flex items-center rounded-full p-2  hover:bg-graydark "

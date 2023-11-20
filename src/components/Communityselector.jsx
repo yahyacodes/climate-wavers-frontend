@@ -50,7 +50,7 @@ const Communityselector = () => {
             ? "hover:bg-graydark p-2 bg-neutral-300 "
             : "hover:bg-graydark p-2"
         }
-        to={"waverx-tweet"}
+        to={"/waverx-tweet"}
       >
         WaverX
       </NavLink>

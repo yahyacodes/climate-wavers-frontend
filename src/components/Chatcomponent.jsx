@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
+import { useParams } from "react-router-dom";
 
 const Chatcomponent = () => {
   const [textValue, setTextValue] = useState("");
@@ -9,6 +10,7 @@ const Chatcomponent = () => {
   const [allMessages, setAllMessages] = useState([]);
   //const userId = 1;
   const kafkaApi = import.meta.env.VITE_APP_KAFKA_URL;
+  const userId = useParams().userId
 
   // Fetch messages from the kafka consumer endpoint
   const handleSubmit = async (e) => {
@@ -18,7 +20,7 @@ const Chatcomponent = () => {
       try {
         await axios
           .get(
-            `${kafkaApi}/api/ai-response/e9d11e91-2db8-4ae9-ab62-367f278cc1ed`
+            `${kafkaApi}/api/ai-response/${userId}`
           )
           .then((res) => {
             console.log(res.data);
@@ -33,7 +35,7 @@ const Chatcomponent = () => {
     const produceMessage = async () => {
       try {
         const data = {
-          userId: "e9d11e91-2db8-4ae9-ab62-367f278cc1ed",
+          userId: userId,
           message: textValue,
           userLocation: { latitude: 40.73061, longitude: -73.935242 },
         };
