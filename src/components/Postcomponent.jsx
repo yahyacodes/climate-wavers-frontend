@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Accountcard from "./Accountcard";
 import { AiFillHeart, AiOutlineRetweet } from "react-icons/ai";
@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 const Postcomponent = ({ category = "" }) => {
   const backendUrl = import.meta.env.VITE_APP_BACKEND_URL;
   const accessToken = Cookies.get("access_token");
-  const postsRef = useRef([]);
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
   const [isSave, setIsSave] = useState(false);
@@ -43,7 +43,7 @@ const Postcomponent = ({ category = "" }) => {
             isLike: false,
             isSave: false,
           }));
-          postsRef.current = posts;
+          setPosts(posts);
           Cookies.set("access_token", res.data.access_token);
           return res.data;
         })
@@ -92,13 +92,13 @@ const Postcomponent = ({ category = "" }) => {
         toast.dismiss(pendingToastId);
         toast.success("Liked a post", { autoClose: 1000 });
         setIsLike(!isLike);
-        const updatedPost = postsRef.current;
+        const updatedPost = posts;
         const post = updatedPost[index];
-        (post["isLike"] = true),
-          (post["likers_count"] = post.savers_count + 1),
-          (updatedPost[index] = post);
+		post["isLike"] = true,
+        post["likers_count"] = post.savers_count + 1,
+		updatedPost[index] = post
         // Update the state
-        postsRef.current = updatedPost;
+        setPosts(updatedPost);
         return res.data;
       })
       .catch((err) => {
@@ -121,14 +121,14 @@ const Postcomponent = ({ category = "" }) => {
         toast.dismiss(pendingToastId);
         toast.success("Unliked a post", { autoClose: 1000 });
         setIsLike(!isLike);
-        const updatedPost = postsRef.current;
+        const updatedPost = posts;
         const post = updatedPost[index];
-        (post["isLike"] = false),
-          (post["likers_count"] = post.savers_count - 1),
-          (updatedPost[index] = post);
+		post["isLike"] = false,
+        post["likers_count"] = post.savers_count - 1,
+		updatedPost[index] = post
 
         // Update the state
-        postsRef.current = updatedPost;
+        setPosts(updatedPost);
         return res.data;
       })
       .catch((err) => {
@@ -150,14 +150,15 @@ const Postcomponent = ({ category = "" }) => {
         toast.dismiss(pendingToastId);
         toast.success("Saved a post", { autoClose: 1000 });
         setIsSave(!isSave);
-        const updatedPost = postsRef.current;
+        const updatedPost = posts;
         const post = updatedPost[index];
-        (post["isSave"] = true),
-          (post["savers_count"] = post.savers_count + 1),
-          (updatedPost[index] = post);
+		post["isSave"] = true,
+        post["savers_count"] = post.savers_count + 1,
+		updatedPost[index] = post
+
 
         // Update the state
-        postsRef.current = updatedPost;
+        setPosts(updatedPost);
         return res.data;
       })
       .catch((err) => {
@@ -178,14 +179,14 @@ const Postcomponent = ({ category = "" }) => {
         Cookies.set("access_token", res.data.access_token);
         toast.dismiss(pendingToastId);
         toast.success("Unsaved a post", { autoClose: 1000 });
-        const updatedPost = postsRef.current;
+        const updatedPost = posts;
         const post = updatedPost[index];
-        (post["isSave"] = false),
-          (post["savers_count"] = post?.savers_count > 1 ? post?.savers_count - 1 : 0),
-          (updatedPost[index] = post);
+		post["isSave"] = false,
+        post["savers_count"] = post?.savers_count - 1,
+		updatedPost[index] = post
 
         // Update the state
-        postsRef.current = updatedPost;
+        setPosts(updatedPost);
 
         return res.data;
       })
@@ -194,11 +195,11 @@ const Postcomponent = ({ category = "" }) => {
         toast.error("Error unsaving a post", { autoClose: 1000 });
       });
   };
-  console.log(postsRef);
+
 
   return (
     <div className=" py-3 border-b-2">
-      {postsRef.current.map((post, index) => (
+      {posts.map((post, index) => (
         <div key={index} className="border-b border-gray-300 py-4">
           <Accountcard userId={post.user} />
           <div onClick={() => handlePostClick(post)}>
