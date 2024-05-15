@@ -1,10 +1,15 @@
-import { BsPerson, BsFillHouseFill, BsBookmark, BsRobot, BsPeople } from "react-icons/bs";
+import {
+  BsPerson,
+  BsFillHouseFill,
+  BsBookmark,
+  BsRobot,
+  BsPeople,
+} from "react-icons/bs";
 import { Link, NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 
-
 const Menu = () => {
-  const userId = Cookies.get("user_id")
+  const userId = Cookies.get("user_id");
   return (
     <div className="flex flex-col px-6">
       {/* Menu */}
@@ -67,7 +72,7 @@ const Menu = () => {
       {/* Post btn */}
       <Link
         to={"./createpost"}
-        className="text-xl text-center font-semibold bg-green text-white p-4 rounded-full"
+        className="text-xl text-center font-semibold bg-green text-white p-2 rounded-full"
       >
         Post
       </Link>

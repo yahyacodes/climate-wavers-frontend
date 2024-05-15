@@ -24,6 +24,7 @@ const Postcomponent = ({ category = "" }) => {
       Authorization: `Bearer ${accessToken}`,
       "X-CSRFToken": `${Cookies.get("csrftoken")}`,
     };
+
     const fetchPosts = async () => {
       await axios
         .get(`${backendUrl}/api/v1/backend/${category}`, {
@@ -49,6 +50,7 @@ const Postcomponent = ({ category = "" }) => {
         })
         .catch((err) => console.log(err.message));
     };
+
     fetchPosts();
   }, [category, accessToken, backendUrl]);
 
@@ -64,6 +66,7 @@ const Postcomponent = ({ category = "" }) => {
     Authorization: `Bearer ${accessToken}`,
     "X-CSRFToken": `${Cookies.get("csrftoken")}`,
   };
+
   const handleLike = (postId, index) => {
     if (!isLike) {
       likePost(postId, index);
@@ -71,6 +74,7 @@ const Postcomponent = ({ category = "" }) => {
       unlikePost(postId, index);
     }
   };
+
   const handleSave = (postId, index) => {
     if (!isSave) {
       savePost(postId, index);
@@ -94,9 +98,9 @@ const Postcomponent = ({ category = "" }) => {
         setIsLike(!isLike);
         const updatedPost = posts;
         const post = updatedPost[index];
-		post["isLike"] = true,
-        post["likers_count"] = post.savers_count + 1,
-		updatedPost[index] = post
+        (post["isLike"] = true),
+          (post["likers_count"] = post.savers_count + 1),
+          (updatedPost[index] = post);
         // Update the state
         setPosts(updatedPost);
         return res.data;
@@ -123,9 +127,9 @@ const Postcomponent = ({ category = "" }) => {
         setIsLike(!isLike);
         const updatedPost = posts;
         const post = updatedPost[index];
-		post["isLike"] = false,
-        post["likers_count"] = post.savers_count - 1,
-		updatedPost[index] = post
+        (post["isLike"] = false),
+          (post["likers_count"] = post.savers_count - 1),
+          (updatedPost[index] = post);
 
         // Update the state
         setPosts(updatedPost);
@@ -136,6 +140,7 @@ const Postcomponent = ({ category = "" }) => {
         toast.error("Error unliking a post", { autoClose: 1000 });
       });
   };
+
   const savePost = async (postId, index) => {
     const pendingToastId = toast.info("Saving a post..", {
       autoClose: 1000,
@@ -152,10 +157,9 @@ const Postcomponent = ({ category = "" }) => {
         setIsSave(!isSave);
         const updatedPost = posts;
         const post = updatedPost[index];
-		post["isSave"] = true,
-        post["savers_count"] = post.savers_count + 1,
-		updatedPost[index] = post
-
+        (post["isSave"] = true),
+          (post["savers_count"] = post.savers_count + 1),
+          (updatedPost[index] = post);
 
         // Update the state
         setPosts(updatedPost);
@@ -166,6 +170,7 @@ const Postcomponent = ({ category = "" }) => {
         toast.error("Error saving a post", { autoClose: 1000 });
       });
   };
+
   const unsavePost = async (postId, index) => {
     const pendingToastId = toast.info("Unsaving a post...", {
       autoClose: 1000,
@@ -181,9 +186,9 @@ const Postcomponent = ({ category = "" }) => {
         toast.success("Unsaved a post", { autoClose: 1000 });
         const updatedPost = posts;
         const post = updatedPost[index];
-		post["isSave"] = false,
-        post["savers_count"] = post?.savers_count - 1,
-		updatedPost[index] = post
+        (post["isSave"] = false),
+          (post["savers_count"] = post?.savers_count - 1),
+          (updatedPost[index] = post);
 
         // Update the state
         setPosts(updatedPost);
@@ -195,7 +200,6 @@ const Postcomponent = ({ category = "" }) => {
         toast.error("Error unsaving a post", { autoClose: 1000 });
       });
   };
-
 
   return (
     <div className=" py-3 border-b-2">
