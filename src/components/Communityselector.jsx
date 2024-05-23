@@ -30,7 +30,7 @@ const Communityselector = () => {
             ? "hover:bg-graydark p-2 bg-neutral-300 "
             : "hover:bg-graydark p-2 hover:rounded-md"
         }
-        to={"/education"}
+        to={"/disaster"}
       >
         Disaster
       </NavLink>
@@ -40,7 +40,7 @@ const Communityselector = () => {
             ? "hover:bg-graydark p-2 bg-neutral-300 "
             : "hover:bg-graydark p-2 hover:rounded-md"
         }
-        to={"/happeningnow"}
+        to={"/aianalysis"}
       >
         AI analysis
       </NavLink>

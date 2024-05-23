@@ -3,13 +3,15 @@ import UserProfile from "./UserProfile";
 import PostActions from "./PostActions";
 import cwPic01 from "../assets/cw-pic-01.png";
 import lamboCar from "../assets/lamboCar.png";
+import { BsArrowLeft } from "react-icons/bs";
 
 const Education = () => {
   return (
     <div className="text-2xl text-center pt-1 md:pt-5 ">
-      <h2 className="pb-1 md:pb-3 text-lg md:text-xl font-semibold ">
-        Education
-      </h2>
+      <div className="border-b-2 text-left mx-5 gap-5 flex pb-1 md:pb-3 font-semibold">
+        <BsArrowLeft />
+        <h2 className="text-lg md:text-xl">Education</h2>
+      </div>
 
       <UserProfile />
 

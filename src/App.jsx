@@ -17,6 +17,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Createpost from "./components/Createpost";
 import Comment from "./pages/Comment";
 import Createcomment from "./components/Createcomment";
+import Disaster from "./components/Disaster";
+import AiAnalysis from "./components/AiAnalysis";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/education" element={<Education />} />
           <Route path="/happeningnow" element={<Happeningnow />} />
+          <Route path="/disaster" element={<Disaster />} />
+          <Route path="/aianalysis" element={<AiAnalysis />} />
           <Route path="/waverx-tweet" element={<WaverX />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/:postId/comments" element={<Comment />} />
