@@ -6,6 +6,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
+import cwPic01 from "../assets/cw-pic-01.png";
+import PostActions from "./PostActions";
+import UserProfile from "./UserProfile";
 
 const Profile = () => {
   const [swittcher, setSwittcher] = useState(false);
@@ -21,8 +24,6 @@ const Profile = () => {
     Authorization: `Bearer ${accessToken}`,
     "X-CSRFToken": `${Cookies.get("csrftoken")}`,
   };
-
-
 
   //const editProfile = async () => {};
   const fetchProfile = async () => {
@@ -67,10 +68,12 @@ const Profile = () => {
       </h2>
       <div
         className={`h-[240px] relative bg-cover bg-center`}
-        style={{ backgroundImage: `url(${
-          data?.user_details?.cover
-            ? `${backendUrl}/api/v1/backend${data.user_details.cover}`
-            : "../../environ.jpeg"})`
+        style={{
+          backgroundImage: `url(${
+            data?.user_details?.cover
+              ? `${backendUrl}/api/v1/backend${data.user_details.cover}`
+              : "../../environ.jpeg"
+          })`,
         }}
       >
         <img
@@ -82,6 +85,15 @@ const Profile = () => {
           className="absolute bottom-0 left-0 w-28 ml-2 mb-2 "
           alt=""
         />
+      </div>
+      <div className="grid grid-cols-3 mt-4 text-left mx-2">
+        <div className="text-gray-900 text-base font-medium">Jese Leos</div>
+        <div className="text-sm text-gray-500">@titisimon21</div>
+        <div className="place-self-end">
+          <button className="rounded-full font-medium text-sm border border-gray-500  pr-2 pl-2 p-1">
+            Edit profile
+          </button>
+        </div>
       </div>
       <div>
         <div className="flex flex-row gap-2 ml-3 mt-3 ">
@@ -96,7 +108,7 @@ const Profile = () => {
         <p className=" font-normal text-left ml-2 text-base my-2 ">
           {data?.user_details?.bio}
         </p>
-        <div className="font-normal text-left text-gray-600 ml-2 text-base my-4 flex flex-row items-center gap-5   ">
+        <div className="font-normal text-left text-gray-400 ml-2 text-base my-4 flex flex-row items-center gap-5   ">
           <p className="flex flex-row items-center gap-1 ">
             <FiMapPin size={17} />
             Nigeria
@@ -104,6 +116,12 @@ const Profile = () => {
           <p className="flex flex-row items-center gap-1">
             <BsBriefcase size={17} />
             Climate Analyst
+          </p>
+          <p className="flex flex-row items-center gap-1">
+            <span className="font-medium">190K</span> Followers
+          </p>
+          <p className="flex flex-row items-center gap-1">
+            <span className="font-medium">456</span> Following
           </p>
         </div>
       </div>
@@ -133,6 +151,24 @@ const Profile = () => {
             Community
           </h2>
         </div>
+
+        <UserProfile />
+
+        <div className="text-gray-600 text-base text-left p-2">
+          <p className="pb-2">
+            The climate protest is not just an event; it`s a call to protect the
+            world we all share. It`s a call to ensure that future generations
+            inherit a planet where clean air, safe water, and a stable climate.
+          </p>
+          <p>
+            Join us in demanding that the world`s leaders take meaningful action
+            to combat climate change.
+          </p>
+
+          <img src={cwPic01} alt="Climate Wavers" className="mt-2" />
+        </div>
+
+        <PostActions />
         <Postcomponent category={category} />
       </div>
     </div>

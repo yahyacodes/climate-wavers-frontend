@@ -1,17 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html",
-  "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors:{
-        'graylight': "#D9D9D9",
-        'graydark': "#D2D2D2",
-        'green': "#008080",
+      colors: {
+        graylight: "#f4f4f4",
+        graydark: "#e7e7e7",
+        green: "#008080",
       },
     },
   },
   plugins: [],
-}
-
+};
